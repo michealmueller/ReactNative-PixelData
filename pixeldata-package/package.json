@@ -12,6 +12,7 @@
     "build": "tsc",
     "prepare": "yarn build",
     "test": "jest",
+    "test:ci": "jest --ci",
     "clean": "rimraf dist"
   },
   "keywords": [
