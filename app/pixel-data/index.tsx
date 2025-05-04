@@ -59,10 +59,10 @@ export const getPixelData = async (
 
     return { ...source, data: imageData.data }
   } catch (error) {
-    if (error instanceof PixelDataError) {
-      throw error
+    if (error instanceof Error) {
+      throw new PixelDataError(`Failed to process pixel data: ${error.message}`);
     }
-    throw new PixelDataError(`Failed to process pixel data: ${error.message}`)
+    throw new PixelDataError('Failed to process pixel data: Unknown error');
   }
 }
 
