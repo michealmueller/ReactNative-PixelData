@@ -50,6 +50,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PixelDataError = void 0;
 exports.getPixelData = getPixelData;
@@ -65,27 +74,30 @@ var PixelDataError = /** @class */ (function (_super) {
 exports.PixelDataError = PixelDataError;
 function getPixelData(_a) {
     return __awaiter(this, arguments, void 0, function (_b) {
-        var width, height, asset, imageData, error_1;
+        var width, height, asset, rectangle, imageData, error_1;
         var expo2dContext = _b.expo2dContext, source = _b.source;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     if (!expo2dContext || !source) {
-                        throw new Error('Missing required parameters');
+                        throw new PixelDataError('Missing required parameters');
                     }
                     width = source.width, height = source.height, asset = source.asset;
                     if (!width || !height || width <= 0 || height <= 0) {
-                        throw new Error('Invalid dimensions');
+                        throw new PixelDataError('Invalid dimensions');
                     }
                     return [4 /*yield*/, asset.downloadAsync()
-                        // Draw the image
+                        // Draw the image with proper parameters
                     ];
                 case 1:
                     _c.sent();
-                    // Draw the image
-                    expo2dContext.drawImage();
-                    imageData = expo2dContext.getImageData(0, 0, width, height);
+                    rectangle = [0, 0, width, height];
+                    expo2dContext.drawImage.apply(expo2dContext, __spreadArray([asset], rectangle, false));
+                    imageData = expo2dContext.getImageData.apply(expo2dContext, rectangle);
+                    if (!(imageData === null || imageData === void 0 ? void 0 : imageData.data)) {
+                        throw new PixelDataError('Failed to get image data');
+                    }
                     return [2 /*return*/, {
                             asset: asset,
                             width: width,
