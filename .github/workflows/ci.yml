@@ -16,7 +16,7 @@ jobs:
           node-version: '20'
           cache: 'yarn'
       - run: yarn install
-      - run: yarn test
+      - run: yarn test:ci
 
   build:
     needs: test
