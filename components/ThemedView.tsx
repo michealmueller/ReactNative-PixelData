@@ -1,3 +1,4 @@
+import React from 'react'
 import { View, ViewProps, StyleSheet } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';

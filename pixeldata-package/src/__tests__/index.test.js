@@ -40,13 +40,17 @@ var index_1 = require("../index");
 var expo_asset_1 = require("expo-asset");
 var expo_2d_context_1 = require("expo-2d-context");
 // Mock expo-2d-context
-jest.mock('expo-2d-context', function () {
-    return jest.fn().mockImplementation(function (gl, options) { return ({
+jest.mock('expo-2d-context', () => {
+    const mockContext = {
         drawImage: jest.fn(),
         getImageData: jest.fn().mockReturnValue({
             data: new Uint8ClampedArray([255, 0, 0, 255]) // Red pixel
         })
-    }); });
+    };
+    return {
+        __esModule: true,
+        default: jest.fn().mockImplementation(() => mockContext)
+    };
 });
 // Mock expo-asset
 jest.mock('expo-asset', function () { return ({
