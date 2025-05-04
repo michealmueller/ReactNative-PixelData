@@ -1,18 +1,28 @@
 {
+  "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "declaration": true,
-    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "jsx": "react-native",
-    "lib": ["es6", "dom"],
-    "moduleResolution": "node",
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "module": "esnext",
+    "noEmit": false,
+    "outDir": "./build",
+    "declaration": true,
+    "declarationDir": "./build",
+    "skipLibCheck": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "examples", "**/__tests__/*"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js",
+    "build"
+  ]
 } 

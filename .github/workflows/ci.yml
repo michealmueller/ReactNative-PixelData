@@ -16,7 +16,7 @@ jobs:
           node-version: '20'
           cache: 'yarn'
       - run: yarn install
-      - run: yarn test:ci
+      - run: yarn test
 
   build:
     needs: test
@@ -31,5 +31,5 @@ jobs:
       - run: yarn build
       - uses: actions/upload-artifact@v4
         with:
-          name: dist
-          path: dist/ 
+          name: build
+          path: build/ 

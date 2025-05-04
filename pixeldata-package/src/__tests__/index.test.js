@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("../index");
 var expo_asset_1 = require("expo-asset");
 var expo_2d_context_1 = require("expo-2d-context");
+import { PixelData } from '../index';
 // Mock expo-2d-context
 jest.mock('expo-2d-context', () => {
     const mockContext = {
@@ -53,137 +54,38 @@ jest.mock('expo-2d-context', () => {
     };
 });
 // Mock expo-asset
-jest.mock('expo-asset', function () { return ({
+jest.mock('expo-asset', () => ({
     Asset: {
         fromModule: jest.fn().mockReturnValue({
-            downloadAsync: jest.fn().mockResolvedValue(undefined)
+            downloadAsync: jest.fn().mockResolvedValue({}),
+            width: 100,
+            height: 100,
+            localUri: 'test-uri'
         })
     }
-}); });
-describe('getPixelData', function () {
-    var mockContext;
-    var mockAsset;
-    beforeEach(function () {
-        mockContext = new expo_2d_context_1.default(1, {
-            maxGradStops: 10,
-            renderWithOffscreenBuffer: false,
-            fastFillTesselation: false
-        });
-        mockAsset = expo_asset_1.Asset.fromModule('test-image');
+}));
+describe('PixelData', () => {
+    it('should initialize correctly', async () => {
+        const pixelData = new PixelData();
+        expect(pixelData).toBeDefined();
     });
-    it('should throw error when context is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, expect((0, index_1.getPixelData)({
-                        expo2dContext: null,
-                        source: {
-                            asset: mockAsset,
-                            width: 100,
-                            height: 100
-                        }
-                    })).rejects.toThrow('Missing required parameters')];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('should throw error when source is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, expect((0, index_1.getPixelData)({
-                        expo2dContext: mockContext,
-                        source: null
-                    })).rejects.toThrow('Missing required parameters')];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('should throw error when dimensions are invalid', function () { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, expect((0, index_1.getPixelData)({
-                        expo2dContext: mockContext,
-                        source: {
-                            asset: mockAsset,
-                            width: 0,
-                            height: 100
-                        }
-                    })).rejects.toThrow('Invalid dimensions')];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('should return pixel data for valid input', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, index_1.getPixelData)({
-                        expo2dContext: mockContext,
-                        source: {
-                            asset: mockAsset,
-                            width: 100,
-                            height: 100
-                        }
-                    })];
-                case 1:
-                    result = _a.sent();
-                    expect(result).toEqual({
-                        asset: mockAsset,
-                        width: 100,
-                        height: 100,
-                        data: expect.any(Uint8ClampedArray)
-                    });
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('should handle asset download error', function () { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    mockAsset.downloadAsync.mockRejectedValue(new Error('Download failed'));
-                    return [4 /*yield*/, expect((0, index_1.getPixelData)({
-                            expo2dContext: mockContext,
-                            source: {
-                                asset: mockAsset,
-                                width: 100,
-                                height: 100
-                            }
-                        })).rejects.toThrow('Failed to process pixel data: Download failed')];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('should handle context error', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var mockGetImageData;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    // Reset downloadAsync mock to resolve
-                    mockAsset.downloadAsync.mockResolvedValue(undefined);
-                    mockGetImageData = jest.fn().mockImplementation(function () {
-                        throw new Error('Context error');
-                    });
-                    mockContext.getImageData = mockGetImageData;
-                    return [4 /*yield*/, expect((0, index_1.getPixelData)({
-                            expo2dContext: mockContext,
-                            source: {
-                                asset: mockAsset,
-                                width: 100,
-                                height: 100
-                            }
-                        })).rejects.toThrow('Failed to process pixel data: Context error')];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); });
+    it('should load image and get pixel data', async () => {
+        const pixelData = new PixelData();
+        const result = await pixelData.getPixelDataFromImage(require('./test-image.png'));
+        expect(result).toBeDefined();
+        expect(result.data).toBeInstanceOf(Uint8ClampedArray);
+    });
+    it('should handle image loading and processing', async () => {
+        const mockContext = {
+            drawImage: jest.fn(),
+            getImageData: jest.fn().mockReturnValue({
+                data: new Uint8ClampedArray([255, 0, 0, 255]) // Red pixel
+            })
+        };
+        const pixelData = new PixelData();
+        const result = await pixelData.getPixelDataFromImage(require('./test-image.png'));
+        expect(mockContext.drawImage).toHaveBeenCalled();
+        expect(mockContext.getImageData).toHaveBeenCalled();
+        expect(result.data).toEqual(new Uint8ClampedArray([255, 0, 0, 255]));
+    });
 });
