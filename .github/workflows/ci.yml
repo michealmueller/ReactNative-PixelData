@@ -28,7 +28,6 @@ jobs:
           node-version: '20'
           cache: 'yarn'
       - run: yarn install
-      - run: yarn clean
       - run: yarn build
       - uses: actions/upload-artifact@v4
         with:
