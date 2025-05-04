@@ -1,29 +1,86 @@
-# Pixel Data Functionality Demo Expo app 👋
+# React Native Pixel Data Example 🎨
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native application demonstrating image processing and pixel data manipulation capabilities using Expo and React Native.
 
-## Get started
+## 🚀 Tech Stack
 
-1. Install dependencies
+- **Framework**: Expo v52
+- **Core**: React Native v0.76.7
+- **Language**: TypeScript
+- **Navigation**: Expo Router
+- **Testing**: Jest
 
+## 📦 Key Dependencies
+
+- `react-native-pixel-jpg`: Image processing
+- `expo-gl`: OpenGL rendering
+- `react-native-canvas`: Canvas operations
+- `react-native-image-picker`: Image selection
+- `expo-2d-context`: 2D context operations
+
+## 🏗️ Project Structure
+
+```
+├── app/                 # Main application code
+│   ├── (tabs)/         # Tab-based navigation
+│   └── pixel-data/     # Pixel data processing
+├── components/         # Reusable components
+├── constants/          # App constants
+├── hooks/             # Custom React hooks
+├── types/             # TypeScript type definitions
+└── assets/            # Static assets
+```
+
+## 🛠️ Installation
+
+1. Install dependencies:
    ```bash
    npm install
-   ```
-   ```bash
+   # or
    yarn install
    ```
 
-2. Start the app
-
+2. Start the development server:
    ```bash
-    npx expo run:android
+   npx expo start
    ```
-   ###### This will build and deploy the app to the emulator by default and your device if connected
 
+3. Run on specific platform:
+   ```bash
+   # Android
+   npx expo run:android
+   
+   # iOS
+   npx expo run:ios
+   
+   # Web
+   npx expo start --web
+   ```
 
-## That is it
+## 📱 Features
 
-* once the project builds and deploys to either the emulator or a physical device, the main index page will load. 
-* This then loads the image on to the JS canvas
-* At which point we set the image as an expo asset then "download" the image. set the pixeldata params expo2dcontext and source members.
-* then run getPixelData to extract the pixel data from the canvas GL context and console logs the values.
+- Image processing and pixel data extraction
+- Canvas-based image manipulation
+- Tab-based navigation
+- Cross-platform support (Android, iOS, Web)
+
+## 🔍 How It Works
+
+1. Load image onto JS canvas
+2. Convert image to Expo asset
+3. Set pixel data parameters (expo2dcontext and source)
+4. Extract pixel data from canvas GL context
+5. Process and display results
+
+## 🧪 Testing
+
+Run tests with:
+```bash
+npm test
+# or
+yarn test
+```
+
+## 📝 License
+
+This project is private and proprietary.

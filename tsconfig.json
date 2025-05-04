@@ -3,6 +3,8 @@
   "compilerOptions": {
     "jsx": "react-native",
     "strict": true,
+    "lib": ["ES2015", "DOM"],
+    "moduleResolution": "node",
     "paths": {
       "@/*": [
         "./*"
