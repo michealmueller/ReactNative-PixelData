@@ -26,22 +26,26 @@ export interface GetPixelDataOptions {
 export async function getPixelData({ expo2dContext, source }: GetPixelDataOptions): Promise<PixelData> {
   try {
     if (!expo2dContext || !source) {
-      throw new Error('Missing required parameters')
+      throw new PixelDataError('Missing required parameters')
     }
 
     const { width, height, asset } = source
 
     if (!width || !height || width <= 0 || height <= 0) {
-      throw new Error('Invalid dimensions')
+      throw new PixelDataError('Invalid dimensions')
     }
 
     await asset.downloadAsync()
 
-    // Draw the image
-    expo2dContext.drawImage()
+    // Draw the image with proper parameters
+    const rectangle = [0, 0, width, height] as const
+    expo2dContext.drawImage(asset, ...rectangle)
     
     // Get the pixel data
-    const imageData = expo2dContext.getImageData(0, 0, width, height)
+    const imageData = expo2dContext.getImageData(...rectangle)
+    if (!imageData?.data) {
+      throw new PixelDataError('Failed to get image data')
+    }
     
     return {
       asset,

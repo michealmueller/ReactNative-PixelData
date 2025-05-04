@@ -10,7 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-native",
     "lib": ["es6", "dom"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "examples", "**/__tests__/*"]
